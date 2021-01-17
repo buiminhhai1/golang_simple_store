@@ -1,8 +1,6 @@
 package api
 
 import (
-	"fmt"
-
 	"github.com/gin-gonic/gin"
 	db "github.com/thuhangpham/simplestores/db/sqlc"
 )
@@ -18,11 +16,12 @@ func NewServer(store db.Store) *Server {
 	server := &Server{store: store}
 	router := gin.Default()
 
-	router.POST("/users", func(c *gin.Context) {
-		fmt.Print("hello world go to middleware")
-	}, server.createUser)
+	router.POST("/auth/register", server.createUser)
+	router.POST("/auth/login", server.verifyUser)
+
+	router.POST("/users", server.createUser)
 	router.GET("/users/:id", server.getUser)
-	router.GET("/users", server.listUser)
+	router.GET("/users", AuthenticateMiddleware, server.listUser)
 	server.router = router
 	return server
 }

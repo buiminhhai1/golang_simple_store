@@ -26,6 +26,7 @@ type Querier interface {
 	GetOrderItemsByOrderID(ctx context.Context, arg GetOrderItemsByOrderIDParams) ([]OrderItem, error)
 	GetOrdersByUserId(ctx context.Context, arg GetOrdersByUserIdParams) ([]Order, error)
 	GetUser(ctx context.Context, id int32) (User, error)
+	GetUserByUserName(ctx context.Context, username string) (User, error)
 	ListBookCategories(ctx context.Context, arg ListBookCategoriesParams) ([]BookCategory, error)
 	ListBooks(ctx context.Context, arg ListBooksParams) ([]Book, error)
 	ListOrders(ctx context.Context, arg ListOrdersParams) ([]Order, error)
