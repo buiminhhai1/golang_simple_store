@@ -3,9 +3,11 @@ INSERT INTO books (
   name,
   price,
   quantity,
+  image,
+  description,
   book_category_id
 ) VALUES (
-  $1, $2, $3, $4
+  $1, $2, $3, $4, $5, $6
 )
 RETURNING *;
 
@@ -28,7 +30,7 @@ OFFSET $2;
 
 -- name: UpdateBook :one
 UPDATE books
-SET name = $2, price = $3, quantity = $4, book_category_id = $5
+SET name = $2, price = $3, quantity = $4, book_category_id = $5, image = $6, description = $7
 WHERE id = $1
 RETURNING *;
 

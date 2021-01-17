@@ -1,6 +1,7 @@
 package api
 
 import (
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	db "github.com/thuhangpham/simplestores/db/sqlc"
 )
@@ -16,8 +17,19 @@ func NewServer(store db.Store) *Server {
 	server := &Server{store: store}
 	router := gin.Default()
 
+	config := cors.DefaultConfig()
+	config.AllowAllOrigins = true
+	config.AddAllowHeaders("*")
+	router.Use(cors.New(config))
+
 	router.POST("/auth/register", server.createUser)
 	router.POST("/auth/login", server.verifyUser)
+
+	router.POST("/categories", AuthenticateMiddleware, server.createBookCategory)
+	router.GET("/categories", AuthenticateMiddleware, server.listCategory)
+
+	router.GET("/books", AuthenticateMiddleware, server.listBook)
+	router.POST("/books", AuthenticateMiddleware, server.createBook)
 
 	router.POST("/users", server.createUser)
 	router.GET("/users/:id", server.getUser)

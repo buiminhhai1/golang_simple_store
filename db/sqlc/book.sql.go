@@ -12,17 +12,21 @@ INSERT INTO books (
   name,
   price,
   quantity,
+  image,
+  description,
   book_category_id
 ) VALUES (
-  $1, $2, $3, $4
+  $1, $2, $3, $4, $5, $6
 )
-RETURNING id, name, price, quantity, book_category_id, created_at
+RETURNING id, name, price, quantity, image, description, book_category_id, created_at
 `
 
 type CreateBookParams struct {
 	Name           string `json:"name"`
 	Price          int32  `json:"price"`
 	Quantity       int32  `json:"quantity"`
+	Image          string `json:"image"`
+	Description    string `json:"description"`
 	BookCategoryID int32  `json:"book_category_id"`
 }
 
@@ -31,6 +35,8 @@ func (q *Queries) CreateBook(ctx context.Context, arg CreateBookParams) (Book, e
 		arg.Name,
 		arg.Price,
 		arg.Quantity,
+		arg.Image,
+		arg.Description,
 		arg.BookCategoryID,
 	)
 	var i Book
@@ -39,6 +45,8 @@ func (q *Queries) CreateBook(ctx context.Context, arg CreateBookParams) (Book, e
 		&i.Name,
 		&i.Price,
 		&i.Quantity,
+		&i.Image,
+		&i.Description,
 		&i.BookCategoryID,
 		&i.CreatedAt,
 	)
@@ -55,7 +63,7 @@ func (q *Queries) DeleteBook(ctx context.Context, id int32) error {
 }
 
 const getBookById = `-- name: GetBookById :one
-SELECT id, name, price, quantity, book_category_id, created_at FROM books
+SELECT id, name, price, quantity, image, description, book_category_id, created_at FROM books
 WHERE id = $1 LIMIT 1
 `
 
@@ -67,6 +75,8 @@ func (q *Queries) GetBookById(ctx context.Context, id int32) (Book, error) {
 		&i.Name,
 		&i.Price,
 		&i.Quantity,
+		&i.Image,
+		&i.Description,
 		&i.BookCategoryID,
 		&i.CreatedAt,
 	)
@@ -74,7 +84,7 @@ func (q *Queries) GetBookById(ctx context.Context, id int32) (Book, error) {
 }
 
 const getBooksByCategoryId = `-- name: GetBooksByCategoryId :many
-SELECT id, name, price, quantity, book_category_id, created_at FROM books
+SELECT id, name, price, quantity, image, description, book_category_id, created_at FROM books
 WHERE book_category_id = $3
 ORDER BY id
 LIMIT $1
@@ -101,6 +111,8 @@ func (q *Queries) GetBooksByCategoryId(ctx context.Context, arg GetBooksByCatego
 			&i.Name,
 			&i.Price,
 			&i.Quantity,
+			&i.Image,
+			&i.Description,
 			&i.BookCategoryID,
 			&i.CreatedAt,
 		); err != nil {
@@ -118,7 +130,7 @@ func (q *Queries) GetBooksByCategoryId(ctx context.Context, arg GetBooksByCatego
 }
 
 const listBooks = `-- name: ListBooks :many
-SELECT id, name, price, quantity, book_category_id, created_at FROM books
+SELECT id, name, price, quantity, image, description, book_category_id, created_at FROM books
 ORDER BY id
 LIMIT $1
 OFFSET $2
@@ -143,6 +155,8 @@ func (q *Queries) ListBooks(ctx context.Context, arg ListBooksParams) ([]Book, e
 			&i.Name,
 			&i.Price,
 			&i.Quantity,
+			&i.Image,
+			&i.Description,
 			&i.BookCategoryID,
 			&i.CreatedAt,
 		); err != nil {
@@ -161,9 +175,9 @@ func (q *Queries) ListBooks(ctx context.Context, arg ListBooksParams) ([]Book, e
 
 const updateBook = `-- name: UpdateBook :one
 UPDATE books
-SET name = $2, price = $3, quantity = $4, book_category_id = $5
+SET name = $2, price = $3, quantity = $4, book_category_id = $5, image = $6, description = $7
 WHERE id = $1
-RETURNING id, name, price, quantity, book_category_id, created_at
+RETURNING id, name, price, quantity, image, description, book_category_id, created_at
 `
 
 type UpdateBookParams struct {
@@ -172,6 +186,8 @@ type UpdateBookParams struct {
 	Price          int32  `json:"price"`
 	Quantity       int32  `json:"quantity"`
 	BookCategoryID int32  `json:"book_category_id"`
+	Image          string `json:"image"`
+	Description    string `json:"description"`
 }
 
 func (q *Queries) UpdateBook(ctx context.Context, arg UpdateBookParams) (Book, error) {
@@ -181,6 +197,8 @@ func (q *Queries) UpdateBook(ctx context.Context, arg UpdateBookParams) (Book, e
 		arg.Price,
 		arg.Quantity,
 		arg.BookCategoryID,
+		arg.Image,
+		arg.Description,
 	)
 	var i Book
 	err := row.Scan(
@@ -188,6 +206,8 @@ func (q *Queries) UpdateBook(ctx context.Context, arg UpdateBookParams) (Book, e
 		&i.Name,
 		&i.Price,
 		&i.Quantity,
+		&i.Image,
+		&i.Description,
 		&i.BookCategoryID,
 		&i.CreatedAt,
 	)
@@ -198,7 +218,7 @@ const updateQuantityBook = `-- name: UpdateQuantityBook :one
 UPDATE books
 SET quantity = $2
 WHERE id = $1
-RETURNING id, name, price, quantity, book_category_id, created_at
+RETURNING id, name, price, quantity, image, description, book_category_id, created_at
 `
 
 type UpdateQuantityBookParams struct {
@@ -214,6 +234,8 @@ func (q *Queries) UpdateQuantityBook(ctx context.Context, arg UpdateQuantityBook
 		&i.Name,
 		&i.Price,
 		&i.Quantity,
+		&i.Image,
+		&i.Description,
 		&i.BookCategoryID,
 		&i.CreatedAt,
 	)

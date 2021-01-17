@@ -51,6 +51,8 @@ type Book struct {
 	Name           string    `json:"name"`
 	Price          int32     `json:"price"`
 	Quantity       int32     `json:"quantity"`
+	Image          string    `json:"image"`
+	Description    string    `json:"description"`
 	BookCategoryID int32     `json:"book_category_id"`
 	CreatedAt      time.Time `json:"created_at"`
 }

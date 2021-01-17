@@ -10,11 +10,17 @@ import (
 	"github.com/thuhangpham/simplestores/util"
 )
 
+func createLinkImage() string {
+	return "https://camo.githubusercontent.com/87155b6db1a8942863c201f9f7122301f55f396b269fe6242429bdbd7f3b0a03/68747470733a2f2f736f6674636f7665722e73332e616d617a6f6e6177732e636f6d2f33382f476f426f6f7463616d702f696d616765732f636f7665722d7765622e706e67"
+}
+
 func createRandomBook(t *testing.T) Book {
 	cate := createRandomCategory(t)
 	arg := CreateBookParams{
 		Name:           util.RandomString(20),
 		Quantity:       int32(util.RandomInt(10, 20)),
+		Image:          createLinkImage(),
+		Description:    util.RandomString(20),
 		Price:          int32(util.RandomInt(500, 2000)),
 		BookCategoryID: cate.ID,
 	}
@@ -30,6 +36,8 @@ func createRandomBookWithCategoryID(t *testing.T, id int32) Book {
 	arg := CreateBookParams{
 		Name:           util.RandomString(20),
 		Quantity:       int32(util.RandomInt(10, 20)),
+		Image:          createLinkImage(),
+		Description:    util.RandomString(20),
 		Price:          int32(util.RandomInt(500, 2000)),
 		BookCategoryID: id,
 	}
@@ -63,6 +71,8 @@ func TestUpdateBook(t *testing.T) {
 		ID:             book1.ID,
 		Name:           util.RandomString(15),
 		Price:          int32(util.RandomInt(500, 5000)),
+		Image:          createLinkImage(),
+		Description:    util.RandomString(25),
 		Quantity:       int32(util.RandomInt(10, 20)),
 		BookCategoryID: book1.BookCategoryID,
 	}

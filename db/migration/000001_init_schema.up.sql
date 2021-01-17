@@ -49,6 +49,8 @@ CREATE TABLE "books" (
   "name" varchar NOT NULL,
   "price" int NOT NULL,
   "quantity" int NOT NULL,
+  "image" varchar NOT NULL,
+  "description" varchar NOT NULL,
   "book_category_id" int NOT NULL,
   "created_at" timestamp NOT NULL DEFAULT (now())
 );
