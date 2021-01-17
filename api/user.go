@@ -6,6 +6,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	db "github.com/thuhangpham/simplestores/db/sqlc"
+	"github.com/thuhangpham/simplestores/util"
 )
 
 type createUserRequest struct {
@@ -23,9 +24,15 @@ func (server *Server) createUser(ctx *gin.Context) {
 		return
 	}
 
+	hashedPassword, err := util.HashPassword(req.Password)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
+		return
+	}
+
 	arg := db.CreateUserParams{
 		Username: req.Username,
-		Password: req.Password,
+		Password: hashedPassword,
 		Email:    req.Email,
 		Role:     db.Role(req.Role),
 		FullName: req.FullName,
