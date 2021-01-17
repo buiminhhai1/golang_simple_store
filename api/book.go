@@ -11,6 +11,8 @@ type createBookRequest struct {
 	Name           string `json:"name" binding:"required"`
 	Price          int32  `json:"price" binding:"required,min=1"`
 	Quantity       int32  `json:"quantity" binding:"required,min=1"`
+	Image          string `json:"image" binding:"required"`
+	Description    string `json:"description" binding:"required"`
 	BookCategoryID int32  `json:"book_category_id" binding:"required"`
 }
 
@@ -25,6 +27,8 @@ func (server *Server) createBook(ctx *gin.Context) {
 		Name:           req.Name,
 		Price:          req.Price,
 		Quantity:       req.Quantity,
+		Image:          req.Image,
+		Description:    req.Description,
 		BookCategoryID: req.BookCategoryID,
 	}
 	book, err := server.store.CreateBook(ctx, arg)
