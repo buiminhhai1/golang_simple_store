@@ -27,3 +27,8 @@
 2. run migrate to generate all tables with them relations you defined on folder db/migrate using ```make migrateup``` or drop them all using ```make migratedown```
 3. create func to access and modify database with ```make sqlc```
 4. start server using ```make server```
+
+# must do
+## construct with tree layer: rep, services, API
+## write docker file to create server -> 
+## deploy to some where like heroku
